@@ -27,7 +27,9 @@ pipeline {
         }
 
         stage('Build and publish image') {
-            agent none
+            agent {
+                label "master"
+            }
             steps {
                 script {
                     dockerImage = docker.build registry + ":1.0.$BUILD_NUMBER" 
