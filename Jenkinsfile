@@ -1,6 +1,6 @@
 pipeline {
     environment {
-        registry = 'sourish88/sample-java-app'
+        registry = 'sourish88/sample-nodejs-app'
         registryCredential = 'DockerHub-Creds'
     }
     
@@ -28,12 +28,14 @@ pipeline {
             }
         }
 
-        stage('Package') {
+        stage('Build and publish image') {
             steps {
-                sh """
-                docker rm $APP_NAME
-                docker run -d --name $APP_NAME -p 8081:8080 $DOCKER_REPO:1.0.${BUILD_NUMBER}
-                """
+                script {
+                    dockerImage = docker.build registry + ":1.0.$BUILD_NUMBER" 
+                    docker.withRegistry( '', registryCredential ) { 
+                        dockerImage.push() 
+                    }
+                }
             }
         }
     } // End of stage
