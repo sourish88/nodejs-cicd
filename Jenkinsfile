@@ -36,5 +36,17 @@ pipeline {
                 }
             }
         }
+
+        stage('Deploy image') {
+            agent {
+                label "mac"
+            }
+            steps {
+                sh """
+                docker rm $APP_NAME
+                docker run -d --name $APP_NAME -p 8081:8080 $DOCKER_REPO:1.0.$BUILD_NUMBER
+                """
+            }
+        }
     } // End of stage
 }
