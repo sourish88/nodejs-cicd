@@ -5,8 +5,8 @@ pipeline {
     }
     
     parameters {
-        string(name: 'APP_NAME',  defaultValue: '',  description: 'Name of the container', trim: true)
-        string(name: 'DOCKER_REPO',  defaultValue: '',  description: 'Docker repository', trim: true)
+        string(name: 'APP_NAME',  defaultValue: 'sample-nodejs',  description: 'Name of the container', trim: true)
+        string(name: 'DOCKER_REPO',  defaultValue: 'sourish88/sample-nodejs-app',  description: 'Docker repository', trim: true)
     }
 
     agent {
