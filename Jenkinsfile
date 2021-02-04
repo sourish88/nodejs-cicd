@@ -7,8 +7,6 @@ pipeline {
     parameters {
         string(name: 'APP_NAME',  defaultValue: '',  description: 'Name of the container', trim: true)
         string(name: 'DOCKER_REPO',  defaultValue: '',  description: 'Docker repository', trim: true)
-        string(name: 'VERSION_TAG',  defaultValue: '',  description: 'Docker image tag', trim: true)
-        string(name: 'ENV_NAME',  defaultValue: '',  description: 'Docker image tag', trim: true)
     }
 
     agent {
@@ -18,11 +16,23 @@ pipeline {
 
     stages {
         // Deployment stage
-        stage('Deploy') {
+        stage('Build') {
+            agent {
+                docker { image 'node:14' }
+            }
+            steps {
+                sh """
+                cd src
+                npm install
+                """
+            }
+        }
+
+        stage('Package') {
             steps {
                 sh """
                 docker rm $APP_NAME
-                docker run -d --name $APP_NAME -p 8081:8080 $DOCKER_REPO:$VERSION_TAG
+                docker run -d --name $APP_NAME -p 8081:8080 $DOCKER_REPO:1.0.${BUILD_NUMBER}
                 """
             }
         }
