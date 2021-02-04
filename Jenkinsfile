@@ -9,9 +9,7 @@ pipeline {
         string(name: 'DOCKER_REPO',  defaultValue: 'sourish88/sample-nodejs-app',  description: 'Docker repository', trim: true)
     }
 
-    agent {
-        label ENV_NAME
-    }
+    agent any
 
 
     stages {
