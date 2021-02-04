@@ -9,7 +9,7 @@ pipeline {
         string(name: 'DOCKER_REPO',  defaultValue: 'sourish88/sample-nodejs-app',  description: 'Docker repository', trim: true)
     }
 
-    agent any
+    agent none
 
 
     stages {
@@ -27,6 +27,7 @@ pipeline {
         }
 
         stage('Build and publish image') {
+            agent none
             steps {
                 script {
                     dockerImage = docker.build registry + ":1.0.$BUILD_NUMBER" 
