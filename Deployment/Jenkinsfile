@@ -1,0 +1,29 @@
+pipeline {
+    environment {
+        registry = 'sourish88/sample-java-app'
+        registryCredential = 'DockerHub-Creds'
+    }
+    
+    parameters {
+        string(name: 'APP_NAME',  defaultValue: 'sample-nodejs',  description: 'Name of the container', trim: true)
+        string(name: 'DOCKER_REPO',  defaultValue: 'sourish88/sample-nodejs-app',  description: 'Docker repository', trim: true)
+        string(name: 'VERSION_TAG',  defaultValue: '1.0.0',  description: 'Docker image tag', trim: true)
+    }
+
+    agent {
+        label "mac"
+    }
+
+
+    stages {
+        // Deployment stage
+        stage('Deploy') {
+            steps {
+                sh """
+                docker rm $APP_NAME
+                docker run -d --name $APP_NAME -p 49160:8080 $DOCKER_REPO:$VERSION_TAG
+                """
+            }
+        }
+    } // End of stage
+}
